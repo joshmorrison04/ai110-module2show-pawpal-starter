@@ -2,6 +2,11 @@
 
 ## 1. System Design
 
+**3 Core Actions**
+- Add a pet to owner profile with basic pet and user info
+- Generate a daily plan and display
+- Track daily task progress (what has been completed and what’s in progress)
+
 **a. Initial design**
 
 - Briefly describe your initial UML design.
