@@ -9,13 +9,20 @@
 
 **a. Initial design**
 
-- Briefly describe your initial UML design.
-- What classes did you include, and what responsibilities did you assign to each?
+My initial UML design was a small, class-based model with clear ownership and scheduling responsibilities: an owner contains pets, pets contain tasks, and a scheduler generates a daily plan from availability and task data.
+
+Classes and responsibilities:
+- `Owner`: Represents a pet owner, stores their name and list of owned pets, and provides the ability to add pets to the profile.
+- `Pet`: Represents a pet, storing the pet’s name and its list of current tasks.
+- `Scheduler`: Represents the scheduling component that holds availability data and generates a daily care plan.
+- `Task`: Represents a care task with metadata (name, description, duration, priority, status) and supports updating status, duration, and priority.
 
 **b. Design changes**
 
 - Did your design change during implementation?
 - If yes, describe at least one change and why you made it.
+
+Yes. I added explicit relationships and helpers to reduce ambiguity and improve performance: `Pet` now keeps a reference to its `Owner`, tasks are stored in a dictionary keyed by name for faster lookup, and `Scheduler` now accepts the list of pets it schedules. I also standardized task statuses and added basic validation for duration/priority to prevent inconsistent state.
 
 ---
 
