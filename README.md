@@ -22,12 +22,24 @@ Your final app should:
 - Display the plan clearly (and ideally explain the reasoning)
 - Include tests for the most important scheduling behaviors
 
+## Features (as implemented)
+
+- Collects tasks across pets and filters by pet name and/or status.
+- Determines task eligibility using recurrence rules (daily/weekly) and last completion date.
+- Sorts tasks by due time, then priority (higher first), then shorter duration; unscheduled tasks come last.
+- Builds a daily plan with optional time availability, skipping tasks that exceed remaining minutes.
+- Detects conflicts both by overlapping time windows and by tasks sharing the same due time.
+
 ## Smarter Scheduling Features
 
 - Tasks are ordered by due time (unscheduled tasks come last).
 - Plans can be filtered by pet or task status.
 - Daily and weekly recurring tasks are supported.
 - Conflicts are detected for overlapping tasks and tasks sharing the same due time.
+
+## 📸 Demo
+
+![PawPal+ demo screenshot](PawPal%20App.png)
 
 ## Getting started
 

@@ -1,3 +1,5 @@
+from datetime import date
+
 import streamlit as st
 from pawpal_system import Owner, Pet, Task, Scheduler
 
@@ -118,13 +120,34 @@ else:
 st.divider()
 
 st.subheader("Build Schedule")
-st.caption("This button should call your scheduling logic once you implement it.")
+st.caption("Generate a sorted, filtered schedule using your Scheduler logic.")
+
+schedule_col1, schedule_col2, schedule_col3 = st.columns(3)
+with schedule_col1:
+    schedule_date = st.date_input("Schedule date", value=date.today())
+with schedule_col2:
+    pet_filter_options = ["All pets"] + [pet.name for pet in st.session_state.scheduler.pets]
+    selected_pet_filter = st.selectbox("Filter by pet", pet_filter_options)
+with schedule_col3:
+    status_filter = st.selectbox(
+        "Filter by status",
+        ["All", Task.STATUS_PENDING, Task.STATUS_IN_PROGRESS, Task.STATUS_COMPLETED],
+    )
 
 if st.button("Generate schedule"):
-    plan = st.session_state.scheduler.generate_daily_plan()
+    plan = st.session_state.scheduler.generate_daily_plan(
+        pet_name=None if selected_pet_filter == "All pets" else selected_pet_filter,
+        status=None if status_filter == "All" else status_filter,
+        on_date=schedule_date,
+    )
     if not plan:
-        st.info("No schedulable tasks found. Add pets and tasks above.")
+        st.info("No schedulable tasks found. Try adjusting the filters or adding tasks.")
     else:
+        total_minutes = sum(task.duration for _, task in plan)
+        st.success(
+            f"Generated {len(plan)} scheduled task(s) totaling {total_minutes} minutes."
+        )
+
         st.write("Scheduled tasks:")
         st.table(
             [
@@ -133,7 +156,48 @@ if st.button("Generate schedule"):
                     "task": task.name,
                     "duration_minutes": task.duration,
                     "priority": task.priority,
+                    "due_time": "unscheduled"
+                    if task.due_time is None
+                    else f"{task.due_time // 60:02d}:{task.due_time % 60:02d}",
+                    "status": task.status,
                 }
                 for pet, task in plan
             ]
         )
+
+        same_time_conflicts = st.session_state.scheduler.same_time_conflicts
+        overlap_conflicts = st.session_state.scheduler.detect_conflicts(plan)
+
+        if same_time_conflicts:
+            st.warning("Some tasks share the same due time.")
+            st.table(
+                [
+                    {
+                        "pet": conflict[0].name,
+                        "task": conflict[1].name,
+                        "conflicts_with_pet": conflict[2].name,
+                        "conflicts_with_task": conflict[3].name,
+                        "due_time": "unscheduled"
+                        if conflict[1].due_time is None
+                        else f"{conflict[1].due_time // 60:02d}:{conflict[1].due_time % 60:02d}",
+                    }
+                    for conflict in same_time_conflicts
+                ]
+            )
+
+        if overlap_conflicts:
+            st.warning("Some tasks overlap based on duration and start time.")
+            st.table(
+                [
+                    {
+                        "pet": conflict[0].name,
+                        "task": conflict[1].name,
+                        "overlaps_with_pet": conflict[2].name,
+                        "overlaps_with_task": conflict[3].name,
+                        "start_time": "unscheduled"
+                        if conflict[1].due_time is None
+                        else f"{conflict[1].due_time // 60:02d}:{conflict[1].due_time % 60:02d}",
+                    }
+                    for conflict in overlap_conflicts
+                ]
+            )
