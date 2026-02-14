@@ -38,6 +38,10 @@ Yes. I added explicit relationships and helpers to reduce ambiguity and improve 
 - Describe one tradeoff your scheduler makes.
 - Why is that tradeoff reasonable for this scenario?
 
+My scheduler prioritizes task priority over perfect time optimality. When time is limited, it schedules higher-priority tasks first and may leave lower-priority tasks unscheduled rather than trying to perfectly pack every minute.
+
+That tradeoff is reasonable because the app’s goal is to ensure essential care (feeding, medication, walks) happens reliably. A simpler “priority-first” strategy is easier to explain to users and avoids risky over-optimization that could push critical tasks out of the plan.
+
 ---
 
 ## 3. AI Collaboration

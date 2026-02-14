@@ -22,6 +22,13 @@ Your final app should:
 - Display the plan clearly (and ideally explain the reasoning)
 - Include tests for the most important scheduling behaviors
 
+## Smarter Scheduling Features
+
+- Tasks are sorted by due time.
+- Tasks can be filtered by pet or status.
+- Daily and weekly recurring tasks are supported.
+- Basic conflict detection identifies tasks scheduled at the same time.
+
 ## Getting started
 
 ### Setup
