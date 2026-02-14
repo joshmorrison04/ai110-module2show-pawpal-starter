@@ -24,10 +24,10 @@ Your final app should:
 
 ## Smarter Scheduling Features
 
-- Tasks are sorted by due time.
-- Tasks can be filtered by pet or status.
+- Tasks are ordered by due time (unscheduled tasks come last).
+- Plans can be filtered by pet or task status.
 - Daily and weekly recurring tasks are supported.
-- Basic conflict detection identifies tasks scheduled at the same time.
+- Conflicts are detected for overlapping tasks and tasks sharing the same due time.
 
 ## Getting started
 
@@ -38,6 +38,24 @@ python -m venv .venv
 source .venv/bin/activate  # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 ```
+
+## Testing PawPal+
+
+Run tests with:
+
+```bash
+python -m pytest
+```
+
+This test suite verifies:
+
+- Task sorting by due time
+- Recurring task logic (daily/weekly)
+- Conflict detection (overlaps and same-time)
+- Task CRUD and validation (duration/priority, completion)
+
+Confidence Level: ⭐⭐⭐☆☆ (3/5)
+Sorting, status/pet filtering, and daily/weekly recurrence are solid, but conflict detection is basic and availability limits may skip lower-priority tasks without rescheduling.
 
 ### Suggested workflow
 
